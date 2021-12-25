@@ -73,17 +73,11 @@ export default function Worker() {
               type="date"
               variant="outlined"
               InputLabelProps={{ shrink: true }}
-              value={currentDate}
+              Defaultvalue={currentDate}
               fullWidth
               onChange={() => updateEmployee()}
               inputRef={dateRef}
             />
-            {/* <TextField
-        id="new-date"
-          style={{ width: "200px", margin: "5px" }}
-          type="date"
-          variant="outlined"
-        /> */}
             <br />
           </div>
         </div>
