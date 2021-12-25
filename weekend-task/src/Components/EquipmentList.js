@@ -55,6 +55,9 @@ export default function EquipmentList() {
     missingArray.forEach((item, i) => item.textContent = items[i].fullQuantity - itemsArray[i].value)
     dispatch(updateEquipment(itemsArray))
   }
+  const deleteItem = (name) => {
+    setItems(items.filter((item) => item.name !== name))
+  }
   useEffect(() => updateEquipmentList(), [items])
   return (
     <>
@@ -71,19 +74,19 @@ export default function EquipmentList() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {items.map((row, i) => (<StyledTableRow key={row.name} >
+            {items.map((item, i) => (<StyledTableRow key={item.name} >
               <StyledTableCell component="th" scope="row">
-                {row.name}
+                {item.name}
               </StyledTableCell>
-              <StyledTableCell align="center">{row.fullQuantity}</StyledTableCell>
+              <StyledTableCell align="center">{item.fullQuantity}</StyledTableCell>
               <StyledTableCell align="center">
                 <TextField
                   className='item'
                   onBlur={(e) => {
                     if (!e.target.value)
                       e.target.value = 0
-                    if (e.target.value > row.fullQuantity)
-                      e.target.value = row.fullQuantity
+                    if (e.target.value > item.fullQuantity)
+                      e.target.value = item.fullQuantity
                     updateEquipmentList()
                   }}
                   onChange={() => updateEquipmentList()}
@@ -91,11 +94,11 @@ export default function EquipmentList() {
                   color="primary"
                   type="number"
                   style={{ maxWidth: 70 }}
-                  defaultValue={row.currentQuantity}
+                  defaultValue={item.currentQuantity}
                 />
               </StyledTableCell>
-              <StyledTableCell align="center" className='missing'>{row.fullQuantity}</StyledTableCell>
-              <StyledTableCell align="center" ><Button disabled={i < 7}><DeleteIcon /></Button></StyledTableCell>
+              <StyledTableCell align="center" className='missing'>{item.fullQuantity}</StyledTableCell>
+              <StyledTableCell align="center" ><Button onClick={() => deleteItem(item.name)} disabled={i < 7}><DeleteIcon /></Button></StyledTableCell>
             </StyledTableRow>))}
           </TableBody>
         </Table>
