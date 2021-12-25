@@ -9,9 +9,11 @@ import { Button } from "@material-ui/core";
 
 export default function FullForm() {
     const { user } = useSelector(({ user }) => user);
+    const { equipment } = useSelector(({ equipment }) => equipment)
     const navigate = useNavigate()
     const submit = () => {
         console.log(user)
+        console.log(equipment)
         navigate('/send', { state: { user } })
     }
 
@@ -23,7 +25,7 @@ export default function FullForm() {
                 size='large'
                 startIcon={<SaveIcon />}
                 variant="contained"
-                color="success"
+                color="primary"
                 size='large'
                 onClick={() => submit()}
             >

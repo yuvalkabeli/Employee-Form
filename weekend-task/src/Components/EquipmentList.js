@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { fullEquipmentList } from '../db/db'
 import TextField from "@material-ui/core/TextField";
 import { styled } from '@mui/material/styles';
@@ -10,6 +10,11 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import NewItem from './NewItem';
+import { Button } from '@material-ui/core';
+import DeleteIcon from '@material-ui/icons/Delete';
+import { useDispatch } from 'react-redux';
+import { updateEquipment } from '../Reducers/equipmentSlice';
+
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -31,13 +36,26 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }));
 
-function createData(name, fullQuantity, currentQuantity, missing) {
-  return { name, fullQuantity, currentQuantity, missing };
-}
+const rows = fullEquipmentList.map(({ name, fullQuantity }) => {
+  return { name, fullQuantity, currentQuantity: 0 }
+})
 
-const rows = fullEquipmentList.map((item) => createData(item.name, item.fullQuantity, '', ''))
-
-export default function EquipmentList(setEquipment) {
+export default function EquipmentList() {
+  const [items, setItems] = useState(rows)
+  const dispatch = useDispatch()
+  const updateEquipmentList = () => {
+    let itemsArray = [].slice.call(document.getElementsByClassName('item'))
+    let missingArray = [].slice.call(document.getElementsByClassName('missing'))
+    itemsArray = itemsArray.map((item, i) => {
+      let { firstChild: { value } } = item.firstChild
+      value = Number(value)
+      const { name } = items[i]
+      return { value, name }
+    })
+    missingArray.forEach((item, i) => item.textContent = items[i].fullQuantity - itemsArray[i].value)
+    dispatch(updateEquipment(itemsArray))
+  }
+  useEffect(() => updateEquipmentList(), [items])
   return (
     <>
       <TableContainer component={Paper}>
@@ -53,32 +71,37 @@ export default function EquipmentList(setEquipment) {
             </TableRow>
           </TableHead>
           <TableBody>
-            {rows.map((row) => (
-              <StyledTableRow key={row.name}>
-                <StyledTableCell component="th" scope="row">
-                  {row.name}
-                </StyledTableCell>
-                <StyledTableCell align="center">{row.fullQuantity}</StyledTableCell>
-                <StyledTableCell align="center">{row.currentQuantity}
-                  <TextField
-                    onFocus={() => console.log('in')}
-                    onBlur={() => console.log('out')}
-                    variant="outlined"
-                    color="primary"
-                    type="text"
-                    style={{ maxWidth: 70 }}
-                    value='0'
-                  />
-                </StyledTableCell>
-                <StyledTableCell align="center">{row.missing}</StyledTableCell>
-                {/* <StyledTableCell align="center" ><Button><DeleteIcon /></Button></StyledTableCell> */}
-              </StyledTableRow>
-            ))}
+            {items.map((row, i) => (<StyledTableRow key={row.name} >
+              <StyledTableCell component="th" scope="row">
+                {row.name}
+              </StyledTableCell>
+              <StyledTableCell align="center">{row.fullQuantity}</StyledTableCell>
+              <StyledTableCell align="center">
+                <TextField
+                  className='item'
+                  onBlur={(e) => {
+                    if (!e.target.value)
+                      e.target.value = 0
+                    if (e.target.value > row.fullQuantity)
+                      e.target.value = row.fullQuantity
+                    updateEquipmentList()
+                  }}
+                  onChange={() => updateEquipmentList()}
+                  variant="outlined"
+                  color="primary"
+                  type="number"
+                  style={{ maxWidth: 70 }}
+                  defaultValue={row.currentQuantity}
+                />
+              </StyledTableCell>
+              <StyledTableCell align="center" className='missing'>{row.fullQuantity}</StyledTableCell>
+              <StyledTableCell align="center" ><Button disabled={i < 7}><DeleteIcon /></Button></StyledTableCell>
+            </StyledTableRow>))}
           </TableBody>
         </Table>
       </TableContainer>
       <br />
-      <NewItem />
+      <NewItem setItems={setItems} items={items} />
     </>
   );
 }

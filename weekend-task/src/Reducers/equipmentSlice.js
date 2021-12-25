@@ -1,23 +1,20 @@
-// import { createSlice } from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit';
 
-// const initialState = {
-//   value: 0,
-// };
+const initialState = {
+    equipment: [],
+};
 
-// export const counterSlice = createSlice({
-//   name: 'counter',
-//   initialState,
-//   reducers: {
-//     increment: (state,action) => {
-//       state.value += action.payload.data;
-//     },
-//     decrement: (state) => {
-//       state.value -= 1;
-//     },
-//   },
-// },[],(state)=>state);
+export const counterSlice = createSlice({
+    name: 'updateEquipment',
+    initialState,
+    reducers: {
+        updateEquipment: (state, action) => {
+            state.equipment = action.payload;
+        },
+    },
+}, [], (state) => state);
 
-// export const { increment, decrement } = counterSlice.actions
+export const { updateEquipment } = counterSlice.actions
 
-// export default counterSlice.reducer;
+export default counterSlice.reducer;
 

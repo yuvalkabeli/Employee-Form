@@ -2,14 +2,24 @@ import React, { useRef } from "react";
 import SaveIcon from "@material-ui/icons/Save";
 import { Typography, TextField, Button, Box } from "@material-ui/core";
 
-export default function NewItem() {
+export default function NewItem({ setItems, items }) {
 
-  const addItemForm = useRef()
+  const nameRef = useRef()
+  const fullQuantityRef = useRef()
+  const currentQuantityRef = useRef()
   const addProduct = () => {
-    // addItemForm().previousSibling().append
+    let name = nameRef.current.value
+    let fullQuantity = fullQuantityRef.current.value
+    let currentQuantity = currentQuantityRef.current.value
+    if (!name || !fullQuantity || !currentQuantity) return alert('wrong')
+    if (items.find((item) => item.name === name)) return alert('name taken')
+    setItems([...items, { name, fullQuantity, currentQuantity }])
+    nameRef.current.value = ''
+    fullQuantityRef.current.value = ''
+    currentQuantityRef.current.value = ''
   }
   return (
-    <div ref={addItemForm} style={{ textAlign: 'center' }}>
+    <div style={{ textAlign: 'center' }}>
       <Box
         component="form"
         sx={{
@@ -26,24 +36,27 @@ export default function NewItem() {
               type="text"
               label="Items name"
               variant="outlined"
+              inputRef={nameRef}
             />
             <br />
             <TextField
               style={{ width: "200px", margin: "5px" }}
-              type="text"
+              type="number"
               label="Full quantity"
               variant="outlined"
+              inputRef={fullQuantityRef}
             />
             <br />
             <TextField
               style={{ width: "200px", margin: "5px" }}
-              type="text"
+              type="number"
               label="Current quantity"
               variant="outlined"
+              inputRef={currentQuantityRef}
             />
             <br />
             <Button
-              onClick={() => alert(2)}
+              onClick={() => addProduct()}
               startIcon={<SaveIcon />}
               variant="contained"
               color="primary"
