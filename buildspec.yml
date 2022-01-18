@@ -3,6 +3,7 @@ version: 0.2
 phases:
   pre_build:
     commands:
+      - cd weekend-task
       - npm install
   build:
     commands:
@@ -11,3 +12,5 @@ phases:
 artifacts:
   files:
     - '**/*'
+  discard-pathes: no
+  base_directory: ./weekend-task
