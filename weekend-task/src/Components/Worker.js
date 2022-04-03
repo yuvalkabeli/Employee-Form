@@ -4,6 +4,7 @@ import moment from 'moment';
 import { useDispatch } from 'react-redux';
 import { updateUser } from "../Reducers/userSlice";
 
+// This component is for Employee details
 export default function Worker() {
   const currentDate = moment(new Date()).format("YYYY-MM-DD")
   const dispatch = useDispatch()

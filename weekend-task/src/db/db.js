@@ -1,3 +1,4 @@
+// A basic database in a form of an array of objects for the item types.
 exports.fullEquipmentList = [
     {
       name: "Stethoscope",
