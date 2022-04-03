@@ -26,7 +26,6 @@ export default function FullForm() {
                 startIcon={<SaveIcon />}
                 variant="contained"
                 color="primary"
-                size='large'
                 onClick={() => submit()}
             >
                 submit form

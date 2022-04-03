@@ -30,12 +30,13 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   '&:nth-of-type(odd)': {
     backgroundColor: theme.palette.action.hover,
   },
-  // hide last border
+  // Hides last border
   '&:last-child td, &:last-child th': {
     border: 0,
   },
 }));
 
+//Makes an array of equipment item objects
 const rows = fullEquipmentList.map(({ name, fullQuantity }) => {
   return { name, fullQuantity, currentQuantity: 0 }
 })
@@ -43,6 +44,7 @@ const rows = fullEquipmentList.map(({ name, fullQuantity }) => {
 export default function EquipmentList() {
   const [items, setItems] = useState(rows)
   const dispatch = useDispatch()
+  // This function updates the state of the items, can also be used to update the database if need be
   const updateEquipmentList = () => {
     let itemsArray = [].slice.call(document.getElementsByClassName('item'))
     let missingArray = [].slice.call(document.getElementsByClassName('missing'))
@@ -55,6 +57,7 @@ export default function EquipmentList() {
     missingArray.forEach((item, i) => item.textContent = items[i].fullQuantity - itemsArray[i].value)
     dispatch(updateEquipment(itemsArray))
   }
+  //Deletes an item from the item list
   const deleteItem = (name) => {
     setItems(items.filter((item) => item.name !== name))
   }
@@ -74,6 +77,7 @@ export default function EquipmentList() {
             </TableRow>
           </TableHead>
           <TableBody>
+              {/* Loads the state array of the item list */}
             {items.map((item, i) => (<StyledTableRow key={item.name} >
               <StyledTableCell component="th" scope="row">
                 {item.name}

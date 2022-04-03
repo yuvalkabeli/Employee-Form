@@ -2,11 +2,14 @@ import React, { useRef } from "react";
 import SaveIcon from "@material-ui/icons/Save";
 import { Typography, TextField, Button, Box } from "@material-ui/core";
 
+// This component is for adding  a new item that does not appear on the original list
 export default function NewItem({ setItems, items }) {
 
   const nameRef = useRef()
   const fullQuantityRef = useRef()
   const currentQuantityRef = useRef()
+  
+  //adds item to the general list of items in the state
   const addProduct = () => {
     let name = nameRef.current.value
     let fullQuantity = fullQuantityRef.current.value
